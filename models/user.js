@@ -8,7 +8,7 @@ let userSchema = mongoose.Schema({
     dob: Date,
     email: String,
     password: String,
-    post:[
+    posts:[
         {type: mongoose.Schema.Types.ObjectId , ref:'post'}
     ]
 })
