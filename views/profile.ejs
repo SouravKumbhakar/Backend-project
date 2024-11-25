@@ -9,7 +9,7 @@
 </head>
 <body>
     <div class="w-full min-h-screen bg-zinc-900 text-white px-12 py-10">
-        <a class="border-2 border-zinc-700 fixed right-10 bg-red-500 py-2 px-3 text-sm rounded-md" href="/logout">logout</a>
+        <a class="border-2 border-zinc-700 absolute right-10 bg-red-500 py-2 px-3 text-sm rounded-md" href="/logout">logout</a>
         <h3 class="text-3xl border-b-2 border-yellow-300 w-[100px]">Profile</h3>
         <p class="mt-3 text-xl font-light">Hello, <span class="text-blue-200 font-normal"><%= user.name %></span> 👋🏻</p>
         <h5 class="text-blue-500 mt-5 mb-2">You can create a post</h5>
@@ -27,8 +27,8 @@
                         <hr>
                         <p class="mt-2 text-sm tracking-tight"><%= post.content %></p>
                         <div class="btns flex mt-5 gap-3">
-                            <a class="text-blue-500" href="/like/<%= post._id%>"><%= post.likes.length %> Like</a>
-                            <a class="text-zinc-400" href="">Edit</a>
+                            <a class="text-blue-500" href="/like/<%= post._id%>"><%= post.likes.length %> <%= post.likes.indexOf(user._id) == -1? "like" : "unlike" %></a>
+                            <a class="text-zinc-400" href="/edit/<%= post._id%>">Edit</a>
                         </div>
                     </div>
                 <% }) %>

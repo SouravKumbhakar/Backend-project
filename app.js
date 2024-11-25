@@ -69,24 +69,33 @@ app.get('/logout', (req,res)=>{ // creating logout route for removing cookie
 
 app.get('/profile',isLoggedIn, async (req,res)=>{ // crating profile route for logged in user uses
     let user = await userModel.findOne({email: req.user.email});
-    let post = await user.populate("posts");
+    await user.populate("posts"); 
     res.render('profile',{user});
 })
 
-app.get('/like/:id',isLoggedIn, async (req,res)=>{ // crating profile route for logged in user uses
+app.get('/like/:id', isLoggedIn, async (req,res)=>{ // crating profile route for logged in user uses
     let post = await postModel.findOne({_id: req.params.id}).populate("user");    
 
     if(post.likes.indexOf(req.user.userid) == -1){
-        post.likes.push(req.user._id);
+        post.likes.push(req.user.userid);
     }
     else{
-        post.likes.splice(post.likes.indexOf(req.user.userid),1);
+        post.likes.splice(post.likes.indexOf(req.user.userid), 1);
     }
 
     await post.save();
     res.redirect("/profile")
 });
 
+app.get('/edit/:id', isLoggedIn, async (req,res)=>{ // crating profile route for logged in user uses
+    let post = await postModel.findOne({_id: req.params.id}).populate("user");    
+    res.render("edit",{post})
+});
+
+app.post('/update/:id',isLoggedIn, async (req,res)=>{ // crating profile route for logged in user uses
+    let post = await postModel.findOneAndUpdate({_id: req.params.id}, {content: req.body.content},{new:true});    
+    res.redirect('/profile');
+});
 
 app.post('/post',isLoggedIn, async (req,res)=>{ // crating profile route for logged in user uses
     let user = await userModel.findOne({email: req.user.email});
@@ -113,7 +122,6 @@ function isLoggedIn(req,res, next){ // this function cheaks user logged in or no
         next(); 
     }
 }
-
 
 app.listen(3000, ()=>{ // running server on 3000 port
     console.log("server on");

@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="/stylesheets/style.css">
+</head>
+<body>
+    <div class="w-full min-h-screen bg-zinc-900 text-white px-12 py-10">
+        <a class="border-2 border-zinc-700 absolute right-10 bg-red-500 py-2 px-3 text-sm rounded-md" href="/logout">logout</a>
+        <h5 class="text-blue-500 mt-5 mb-2">Edit post</h5>
+        <form action="/update/<%= post._id %>" method="post">
+            <textarea class="resize-none bg-transparent border-2 border-zinc-800 outline-none p-3 rounded-md w-2/3" name="content" placeholder="Write something...."><%= post.content %></textarea>
+            <input class="px-3 py-2 rounded-md bg-yellow-500 w-40 block mt-3" type="submit" value="Edit post">
+        </form>
+
+        <p class="text-blue-200 mt-5 font-light">Go back to <a class="font-normal text-blue-500" href="/profile">Home</a></p>
+        
+    </div>
+</body>
+</html>
