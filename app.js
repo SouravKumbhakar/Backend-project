@@ -6,6 +6,7 @@ const jwt = require('jsonwebtoken');// require jwt for send cookies in jwt forma
 const userModel = require('./models/user');// require user from the database
 const postModel = require('./models/post');// require post from the database
 const bcrypt = require('bcrypt');//requiring bcrypt for Authentication and authorisation
+const upload = require('./config/multerconfig');
 
 app.set("view engine", "ejs"); //set up ejs view engine 
 app.use(express.json()); //set up middleware
@@ -13,8 +14,20 @@ app.use(express.urlencoded({extended: true})); //set up middleware
 app.use(express.static(path.join(__dirname, 'public'))) //redirect the short path to public so we are not require to write the full path
 app.use(cookieParser());
 
+
 app.get('/', (req,res)=>{
     res.render('index'); //render to index.ejs 
+});
+
+app.get('/profile/upload',  (req,res)=>{
+    res.render('profileUpload'); //render to index.ejs 
+});
+
+app.post('/upload', isLoggedIn, upload.single("image") , async (req,res)=>{
+   let user = await userModel.findOne({email: req.user.email})
+   user.profilepic = req.file.filename;
+   await user.save();
+   res.redirect("/profile")
 });
 
 app.get('/login' , (req,res)=>{
@@ -71,6 +84,13 @@ app.get('/profile',isLoggedIn, async (req,res)=>{ // crating profile route for l
     let user = await userModel.findOne({email: req.user.email});
     await user.populate("posts"); 
     res.render('profile',{user});
+})
+
+app.get('/home',isLoggedIn, async (req,res)=>{ // crating profile route for logged in user uses
+    // const userx = await userModel.findOne({email:req.user.email});
+    const allposts = await postModel.find({}).populate("user");
+    res.render('home',{allposts});
+    
 })
 
 app.get('/like/:id', isLoggedIn, async (req,res)=>{ // crating profile route for logged in user uses

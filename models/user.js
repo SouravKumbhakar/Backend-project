@@ -7,6 +7,10 @@ let userSchema = mongoose.Schema({
     name: String,
     dob: Date,
     email: String,
+    profilepic: {
+        type: String,
+        default: "default.png"
+    },
     password: String,
     posts:[
         {type: mongoose.Schema.Types.ObjectId , ref:'post'}
